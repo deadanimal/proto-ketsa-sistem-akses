@@ -1,0 +1,711 @@
+<div class="header pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-12">
+          <h6 class="h2 text-dark d-inline-block mb-0">Tetapan</h6>
+
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)">
+                  <i class="fas fa-cogs text-dark"> </i>
+                </a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card card-calendar">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Kalender</h5>
+            </div>
+            <div class="col text-right">
+              <a
+                class="fullcalendar-btn-prev btn btn-sm btn-neutral"
+                href="javascript:void(0)"
+                (click)="calendar.next()"
+              >
+                <i class="fas fa-angle-left"> </i>
+              </a>
+
+              <a
+                class="fullcalendar-btn-next btn btn-sm btn-neutral"
+                href="javascript:void(0)"
+                (click)="calendar.prev()"
+              >
+                <i class="fas fa-angle-right"> </i>
+              </a>
+
+              <a
+                class="btn btn-sm btn-neutral"
+                data-calendar-view="month"
+                href="javascript:void(0)"
+                (click)="changeView('dayGridMonth')"
+              >
+                Bulanan
+              </a>
+
+              <a
+                class="btn btn-sm btn-neutral"
+                data-calendar-view="basicWeek"
+                href="javascript:void(0)"
+                (click)="changeView('dayGridWeek')"
+              >
+                Mingguan
+              </a>
+
+              <a
+                class="btn btn-sm btn-neutral"
+                data-calendar-view="basicDay"
+                href="javascript:void(0)"
+                (click)="changeView('dayGridDay')"
+              >
+                Harian
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div
+            class="calendar"
+            data-toggle="calendar"
+            id="calendarUserSetting"
+          ></div>
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        aria-labelledby="new-event-label"
+        class="modal fade"
+        id="new-event"
+        role="dialog"
+        tabindex="-1"
+      >
+        <div
+          class="modal-dialog modal-dialog-centered modal-secondary"
+          role="document"
+        >
+          <ng-template #modalAdd>
+            <div class="modal-body">
+              <form class="new-event--form">
+                <div class="form-group">
+                  <label class="form-control-label"> Event title </label>
+
+                  <input
+                    class="
+                      form-control form-control-alternative
+                      new-event--title
+                    "
+                    id="new-event--title"
+                    placeholder="Event Title"
+                    type="text"
+                    (change)="getNewEventTitle($event)"
+                  />
+                </div>
+
+                <div class="form-group mb-0">
+                  <label class="form-control-label d-block mb-3">
+                    Status color
+                  </label>
+
+                  <div
+                    class="
+                      btn-group btn-group-toggle btn-group-colors
+                      event-tag
+                    "
+                    data-toggle="buttons"
+                  >
+                    <label
+                      class="btn bg-info"
+                      [ngClass]="{ active: radios === 'bg-info' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        checked="checked"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-info"
+                        (click)="radios = 'bg-info'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-warning"
+                      [ngClass]="{ active: radios === 'bg-warning' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-warning"
+                        (click)="radios = 'bg-warning'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-danger"
+                      [ngClass]="{ active: radios === 'bg-danger' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-danger"
+                        (click)="radios = 'bg-danger'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-success"
+                      [ngClass]="{ active: radios === 'bg-success' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-success"
+                        (click)="radios = 'bg-success'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-default"
+                      [ngClass]="{ active: radios === 'bg-default' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-default"
+                        (click)="radios = 'bg-default'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-primary"
+                      [ngClass]="{ active: radios === 'bg-primary' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-primary"
+                        (click)="radios = 'bg-primary'"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <input class="new-event--start" type="hidden" />
+
+                <input class="new-event--end" type="hidden" />
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                class="btn btn-primary new-event--add"
+                type="submit"
+                (click)="addNewEvent()"
+              >
+                Add event
+              </button>
+
+              <button
+                (click)="addModal.hide()"
+                class="btn btn-link ml-auto"
+                data-dismiss="modal"
+                type="button"
+              >
+                Close
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        aria-labelledby="edit-event-label"
+        class="modal fade"
+        id="edit-event"
+        role="dialog"
+        tabindex="-1"
+      >
+        <div
+          class="modal-dialog modal-dialog-centered modal-secondary"
+          role="document"
+        >
+          <ng-template #modalEdit>
+            <div class="modal-body">
+              <form class="edit-event--form">
+                <div class="form-group">
+                  <label class="form-control-label"> Event title </label>
+
+                  <input
+                    class="
+                      form-control form-control-alternative
+                      edit-event--title
+                    "
+                    placeholder="Event Title"
+                    type="text"
+                    value="{{ eventTitle }}"
+                    (change)="getNewEventTitle($event)"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-control-label d-block mb-3">
+                    Status color
+                  </label>
+
+                  <div
+                    class="
+                      btn-group btn-group-toggle btn-group-colors
+                      event-tag
+                      mb-0
+                    "
+                    data-toggle="buttons"
+                  >
+                    <label
+                      class="btn bg-info"
+                      [ngClass]="{ active: radios === 'bg-info' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        checked="checked"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-info"
+                        (click)="radios = 'bg-info'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-warning"
+                      [ngClass]="{ active: radios === 'bg-warning' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-warning"
+                        (click)="radios = 'bg-warning'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-danger"
+                      [ngClass]="{ active: radios === 'bg-danger' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-danger"
+                        (click)="radios = 'bg-danger'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-success"
+                      [ngClass]="{ active: radios === 'bg-success' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-success"
+                        (click)="radios = 'bg-success'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-default"
+                      [ngClass]="{ active: radios === 'bg-default' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-default"
+                        (click)="radios = 'bg-default'"
+                      />
+                    </label>
+
+                    <label
+                      class="btn bg-primary"
+                      [ngClass]="{ active: radios === 'bg-primary' }"
+                    >
+                      <input
+                        autocomplete="off"
+                        name="event-tag"
+                        type="radio"
+                        value="bg-primary"
+                        (click)="radios = 'bg-primary'"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-control-label"> Description </label>
+
+                  <textarea
+                    class="
+                      form-control form-control-alternative
+                      edit-event--description
+                      textarea-autosize
+                    "
+                    placeholder="Event Desctiption"
+                    value="{{ eventDescription }}"
+                    (change)="getNewEventDescription($event)"
+                  ></textarea>
+
+                  <i class="form-group--bar"> </i>
+                </div>
+
+                <input class="edit-event--id" type="hidden" />
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                class="btn btn-primary"
+                data-calendar="update"
+                (click)="updateEvent()"
+              >
+                Update
+              </button>
+
+              <button
+                class="btn btn-danger"
+                data-calendar="delete"
+                (click)="deleteEventSweetAlert()"
+              >
+                Delete
+              </button>
+
+              <button
+                class="btn btn-link ml-auto"
+                data-dismiss="modal"
+                (click)="editModal.hide()"
+              >
+                Close
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Lokasi</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label"
+                    >Pendaftaran Cadangan Lokasi oleh Pemohon Bersama</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Taip disini.."
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label"
+                    >Pendaftaran Lokasi Baharu oleh NCA dan CA
+                  </label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Taip disini.."
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label"
+                    >Pendaftaran Lokasi yang Memerlukan Permit Tambahan</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Taip disini.."
+                  />
+                </div>
+              </div>
+
+              <div class="col-xl-8">
+                <div
+                  style="height: 400px"
+                  leaflet
+                  [leafletOptions]="options"
+                  [leafletLayers]="layers"
+                ></div>
+              </div>
+              <div class="col-xl-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="h3 mb-0">Pinkan Lokasi</h5>
+                  </div>
+
+                  <div class="card-body">
+                    <ul class="list-group list-group-flush list my--3">
+                      <li class="list-group-item px-0">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <a
+                              class="avatar rounded-circle"
+                              href="javascript:void(0)"
+                            >
+                              <img
+                                alt="Image placeholder"
+                                src="assets/img/default/pinpoint-red.png"
+                                style="width: 50%"
+                              />
+                            </a>
+                          </div>
+
+                          <div class="col">
+                            <div class="col ml--2">
+                              <h4 class="mb-0">
+                                <a href="javascript:void(0)"> Lokasi 1 </a>
+                              </h4>
+
+                              <span class="text-warning"> ● </span>
+
+                              <small>
+                                Pendaftaran Cadangan Lokasi oleh Pemohon Bersama
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+
+                      <li class="list-group-item px-0">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <a
+                              class="avatar rounded-circle"
+                              href="javascript:void(0)"
+                            >
+                              <img
+                                alt="Image placeholder"
+                                src="assets/img/default/pinpoint-blue.png"
+                                style="width: 50%"
+                              />
+                            </a>
+                          </div>
+
+                          <div class="col">
+                            <div class="col ml--2">
+                              <h4 class="mb-0">
+                                <a href="javascript:void(0)"> Lokasi 2 </a>
+                              </h4>
+
+                              <span class="text-danger"> ● </span>
+
+                              <small>
+                                Pendaftaran Lokasi Baharu oleh NCA dan CA
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+
+                      <li class="list-group-item px-0">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <a
+                              class="avatar rounded-circle"
+                              href="javascript:void(0)"
+                            >
+                              <img
+                                alt="Image placeholder"
+                                src="assets/img/default/pinpoint-yellow.png"
+                                style="width: 50%"
+                              />
+                            </a>
+                          </div>
+
+                          <div class="col">
+                            <div class="col ml--2">
+                              <h4 class="mb-0">
+                                <a href="javascript:void(0)"> Lokasi 3 </a>
+                              </h4>
+
+                              <span class="text-success"> ● </span>
+
+                              <small>
+                                Pendaftaran Lokasi yang Memerlukan Permit
+                                Tambahan
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12 text-right">
+                <button
+                  class="btn btn-default"
+                  type="button"
+                  (click)="successSwal('disimpan')"
+                >
+                  Simpan
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="m-0">Pengguna</h3>
+            </div>
+            <!-- <div class="col text-right">
+              <button
+                class="btn btn-icon btn-default"
+                type="button"
+                title="Papar"
+                (click)="openModal(viewAction)"
+              >
+                Tambah Baru
+              </button>
+            </div> -->
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="dataTables_wrapper py-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Tunjukkan
+                    <select
+                      name="datatable_length"
+                      aria-controls="datatable"
+                      class="form-control form-control-sm"
+                      (change)="entriesChange($event)"
+                    >
+                      <option value="3" [selected]="entries == 3">3</option>
+                      <option value="6" [selected]="entries == 6">6</option>
+                      <option value="9" [selected]="entries == 9">9</option>
+                      <option value="-1" [selected]="entries == -1">
+                        Semua
+                      </option>
+                    </select>
+                    rekod
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input
+                      type="search"
+                      class="form-control form-control-sm"
+                      placeholder="Search records"
+                      aria-controls="datatable"
+                      (keyup)="filterTable($event)"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <ngx-datatable
+              class="bootstrap selection-cell"
+              [columnMode]="'force'"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="'auto'"
+              [limit]="entries != -1 ? entries : undefined"
+              [rows]="temp"
+            >
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> No. </span>
+                </ng-template>
+                <ng-template
+                  ngx-datatable-cell-template
+                  let-rowIndex="rowIndex"
+                  let-row="row"
+                >
+                  {{ rowIndex + 1 }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span>
+                    Pendaftaran pentadbir CA peringkat negeri oleh NCA
+                  </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.tadbir }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Pendaftaran ahli CA oleh pentadbir CA </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.name }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Senarai Hitam </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.hitam }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> NCA </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.nca }}
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

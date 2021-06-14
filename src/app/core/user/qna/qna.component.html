@@ -1,0 +1,93 @@
+<div class="header pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <h6 class="h2 text-dark d-inline-block mb-0">Soalan Lazim</h6>
+
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)">
+                  <i class="fas fa-question-circle text-dark"> </i>
+                </a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-warning">
+          <div class="row align-items-center">
+            <div class="col text-center">
+              <h3 class="h2 mb-3 text-white">Carian Soalan Lazim</h3>
+
+              <div
+                class="input-group input-group-alternative input-group-merge"
+              >
+                <div class="input-group-prepend">
+                  <span class="input-group-text"
+                    ><i class="fas fa-search"></i
+                  ></span>
+                </div>
+                <input class="form-control" placeholder="Search" type="text" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Soalan Lazim</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <accordion [isAnimated]="true">
+            <accordion-group heading="Pelan Induk Pengujian">
+              <div class="ml-5">
+                Pelan Induk Pengujian telah diterima dan disahkan oleh pemilik
+                projek.
+              </div>
+            </accordion-group>
+            <accordion-group heading="Persekitaran Pengujian">
+              <div class="ml-5">Persekitaran pengujian telah disediakan.</div>
+            </accordion-group>
+            <accordion-group heading="Senario Kemungkinan">
+              <div class="ml-5">
+                Senario untuk setiap kemungkinan telah dilakukan ujian.
+              </div>
+            </accordion-group>
+            <accordion-group heading="Data Ujian">
+              <div class="ml-5">Data ujian telah disediakan.</div>
+            </accordion-group>
+          </accordion>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <livechat-widget
+    #liveChatWidget
+    licenseId="11082047"
+    (onChatLoaded)="onChatLoaded($event)"
+    (onChatWindowOpened)="onChatWindowOpened()"
+    (onChatWindowMinimized)="onChatWindowMinimized()"
+    [visitor]=""
+    [params]=""
+  ></livechat-widget>
+</footer>

@@ -1,0 +1,234 @@
+<div class="header pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-12">
+          <h6 class="h2 text-dark d-inline-block mb-0">Pemohon Bersama</h6>
+
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)">
+                  <i class="fas fa-file-signature text-dark"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" class="text-dark">Permohonan</a>
+              </li>
+              <li aria-current="page" class="breadcrumb-item active">
+                Pemohon Bersama
+              </li>
+            </ol>
+          </nav>
+        </div>
+
+        <!-- <div class="col-lg-6 col-5 text-right">
+              <a class="btn btn-sm btn-neutral" href="javascript:void(0)"> New </a>
+    
+              <a class="btn btn-sm btn-neutral" href="javascript:void(0)">
+                Filters
+              </a>
+            </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Analisis Permohonan Mengikut Bulan</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="chart">
+            <div class="amchart" id="chartdivusercoapplicant1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Membuat Permohonan</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">Nama Penuh</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Taip disini.."
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">No. Tel.</label>
+                  <input
+                    class="form-control"
+                    type="tel"
+                    placeholder="0123456789"
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">Lokasi</label>
+                  <textarea class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">Email</label>
+                  <input
+                    class="form-control"
+                    type="email"
+                    placeholder="Taip disini.."
+                  />
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">Kata Laluan</label>
+                  <input
+                    class="form-control"
+                    type="password"
+                    placeholder="Taip disini.."
+                  />
+                </div>
+              </div>
+              <div class="col-md-12 text-right">
+                <button
+                  class="btn btn-default"
+                  type="button"
+                  (click)="successSwal('disimpan')"
+                >
+                  Simpan
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <h3 class="m-0">Rekod Laporan</h3>
+        </div>
+        <div class="card-body">
+          <div class="dataTables_wrapper py-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Tunjukkan
+                    <select
+                      name="datatable_length"
+                      aria-controls="datatable"
+                      class="form-control form-control-sm"
+                      (change)="entriesChange($event)"
+                    >
+                      <option value="3" [selected]="entries == 3">3</option>
+                      <option value="6" [selected]="entries == 6">6</option>
+                      <option value="9" [selected]="entries == 9">9</option>
+                      <option value="-1" [selected]="entries == -1">
+                        semua
+                      </option>
+                    </select>
+                    rekod
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input
+                      type="search"
+                      class="form-control form-control-sm"
+                      placeholder="Cari rekod"
+                      aria-controls="datatable"
+                      (keyup)="filterTable($event)"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <ngx-datatable
+              class="bootstrap selection-cell"
+              [columnMode]="'force'"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="'auto'"
+              [limit]="entries != -1 ? entries : undefined"
+              [rows]="temp"
+            >
+              <!-- <ngx-datatable-column>
+                  <ng-template ngx-datatable-header-template>
+                    <span> No. </span>
+                  </ng-template>
+                  <ng-template
+                    ngx-datatable-cell-template
+                    let-rowIndex="rowIndex"
+                    let-row="row"
+                  >
+                    {{ rowIndex + 1 }}
+                  </ng-template>
+                </ngx-datatable-column> -->
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> ID </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.project }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Nama </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.name }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Lokasi </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.location }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> No. Permit </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.permit }}
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

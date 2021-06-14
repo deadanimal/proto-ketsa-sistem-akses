@@ -1,0 +1,280 @@
+<div class="header pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-12">
+          <h6 class="h2 text-dark d-inline-block mb-0">Semakan Permohonan</h6>
+
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)">
+                  <i class="fas fa-file-signature text-dark"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" class="text-dark"
+                  >Permohonan Permit</a
+                >
+              </li>
+              <li aria-current="page" class="breadcrumb-item active">
+                Semakan Permohonan
+              </li>
+            </ol>
+          </nav>
+        </div>
+
+        <!-- <div class="col-lg-6 col-5 text-right">
+          <a class="btn btn-sm btn-neutral" href="javascript:void(0)"> New </a>
+
+          <a class="btn btn-sm btn-neutral" href="javascript:void(0)">
+            Filters
+          </a>
+        </div> -->
+      </div>
+
+      <div class="row">
+        <div class="col-xl-4">
+          <div class="card bg-success card-stats">
+            <div class="card-body">
+              <div class="row">
+                <div class="try1">
+                  <div class="col">
+                    <h5
+                      class="
+                        card-title
+                        text-uppercase text-white text-muted
+                        mb-3
+                      "
+                    >
+                      Tender yang Diluluskan
+                    </h5>
+                  </div>
+                  <div class="col">
+                    <h5 class="h2 font-weight-bold text-white mb-2">351</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4">
+          <div class="card bg-warning card-stats">
+            <div class="card-body">
+              <div class="row">
+                <div class="try1">
+                  <div class="col">
+                    <h5
+                      class="
+                        card-title
+                        text-uppercase text-white text-muted
+                        mb-3
+                      "
+                    >
+                      Tender yang Sedang Diproses
+                    </h5>
+                  </div>
+                  <div class="col">
+                    <h5 class="h2 font-weight-bold text-white mb-2">211</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4">
+          <div class="card bg-danger card-stats">
+            <div class="card-body">
+              <div class="row">
+                <div class="try1">
+                  <div class="col">
+                    <h5
+                      class="
+                        card-title
+                        text-uppercase text-white text-muted
+                        mb-3
+                      "
+                    >
+                      Tender yang Tidak Diluluskan
+                    </h5>
+                  </div>
+                  <div class="col">
+                    <h5 class="h2 font-weight-bold text-white mb-2">101</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Paparan Jumlah Tender</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="chart">
+            <div class="amchart" id="chartdivcheckapplication1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Paparan Jumlah Tender Mengikut Bulanan</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="chart">
+            <div class="amchart" id="chartdivcheckapplication2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <h3 class="m-0">Senarai Soalan yang Diterima</h3>
+        </div>
+        <div class="card-body">
+          <div class="dataTables_wrapper py-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Tunjukkan
+                    <select
+                      name="datatable_length"
+                      aria-controls="datatable"
+                      class="form-control form-control-sm"
+                      (change)="entriesChange($event)"
+                    >
+                      <option value="3" [selected]="entries == 3">3</option>
+                      <option value="6" [selected]="entries == 6">6</option>
+                      <option value="9" [selected]="entries == 9">9</option>
+                      <option value="-1" [selected]="entries == -1">
+                        semua
+                      </option>
+                    </select>
+                    rekod
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input
+                      type="search"
+                      class="form-control form-control-sm"
+                      placeholder="Cari rekod"
+                      aria-controls="datatable"
+                      (keyup)="filterTable($event)"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <ngx-datatable
+              class="bootstrap selection-cell"
+              [columnMode]="'force'"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="'auto'"
+              [limit]="entries != -1 ? entries : undefined"
+              [rows]="temp"
+            >
+              <!-- <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> No. </span>
+                </ng-template>
+                <ng-template
+                  ngx-datatable-cell-template
+                  let-rowIndex="rowIndex"
+                  let-row="row"
+                >
+                  {{ rowIndex + 1 }}
+                </ng-template>
+              </ngx-datatable-column> -->
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> ID </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.project }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Nama </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.name }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> No. Permit </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.permit }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Tarikh </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.date }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span>Status</span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <span
+                    *ngIf="row.status == 'checked'"
+                    class="badge badge-pill badge-success"
+                    >Diluluskan</span
+                  >
+                  <span
+                    *ngIf="row.status == 'inproses'"
+                    class="badge badge-pill badge-warning"
+                    >Dalam Proses</span
+                  >
+                  <span
+                    *ngIf="row.status == 'unchecked'"
+                    class="badge badge-pill badge-danger"
+                    >Tidak Diluluskan</span
+                  >
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

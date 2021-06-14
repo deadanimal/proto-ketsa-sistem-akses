@@ -1,0 +1,473 @@
+<div class="header pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-12">
+          <h6 class="h2 text-dark d-inline-block mb-0">Permit</h6>
+
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)">
+                  <i class="fas fa-file-signature text-dark"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" class="text-dark">Permohonan</a>
+              </li>
+              <li aria-current="page" class="breadcrumb-item active">Permit</li>
+            </ol>
+          </nav>
+        </div>
+
+        <!-- <div class="col-lg-6 col-5 text-right">
+                <a class="btn btn-sm btn-neutral" href="javascript:void(0)"> New </a>
+      
+                <a class="btn btn-sm btn-neutral" href="javascript:void(0)">
+                  Filters
+                </a>
+              </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h5 class="h3 mb-0">Jumlah Pendaftaran Permit Mengikut Bulan</h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="chart">
+            <div class="amchart" id="chartdivuserapplicantionpermit1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6 py-3">
+              <button
+                type="button"
+                class="btn btn-block btn-default"
+                (click)="openModal(addNew)"
+              >
+                Borang Permohonan Permit
+              </button>
+            </div>
+            <div class="col-md-6 py-3">
+              <button
+                type="button"
+                class="btn btn-block btn-default"
+                (click)="openModal1(stepPermit)"
+              >
+                Cara Permohonan Permit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <h3 class="m-0">Senarai Pembayaran</h3>
+        </div>
+        <div class="card-body">
+          <div class="dataTables_wrapper py-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Tunjukkan
+                    <select
+                      name="datatable_length"
+                      aria-controls="datatable"
+                      class="form-control form-control-sm"
+                      (change)="entriesChange($event)"
+                    >
+                      <option value="3" [selected]="entries == 3">3</option>
+                      <option value="6" [selected]="entries == 6">6</option>
+                      <option value="9" [selected]="entries == 9">9</option>
+                      <option value="-1" [selected]="entries == -1">
+                        semua
+                      </option>
+                    </select>
+                    rekod
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input
+                      type="search"
+                      class="form-control form-control-sm"
+                      placeholder="Cari rekod"
+                      aria-controls="datatable"
+                      (keyup)="filterTable($event)"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <ngx-datatable
+              class="bootstrap selection-cell"
+              [columnMode]="'force'"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="'auto'"
+              [limit]="entries != -1 ? entries : undefined"
+              [rows]="temp"
+            >
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> No. </span>
+                </ng-template>
+                <ng-template
+                  ngx-datatable-cell-template
+                  let-rowIndex="rowIndex"
+                  let-row="row"
+                >
+                  {{ rowIndex + 1 }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Nama </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.name }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> No. Tel. </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.tel }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span>Status</span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <span
+                    *ngIf="row.status == 'checked'"
+                    class="badge badge-pill badge-success"
+                    >Diterima</span
+                  >
+                  <span
+                    *ngIf="row.status == 'inproses'"
+                    class="badge badge-pill badge-warning"
+                    >Dalam Proses</span
+                  >
+                  <span
+                    *ngIf="row.status == 'unchecked'"
+                    class="badge badge-pill badge-danger"
+                    >Belum Diterima</span
+                  >
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #addNew>
+  <div class="modal-header bg-default">
+    <h6 class="modal-title text-white" id="modal-title-default">
+      Borang Permohonan Permit
+    </h6>
+
+    <button
+      aria-label="Close"
+      class="close"
+      data-dismiss="modal"
+      type="button"
+      (click)="modalRef.hide()"
+    >
+      <span class="text-white" aria-hidden="true"> × </span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <mat-horizontal-stepper #stepper>
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+          <!-- <ng-template matStepLabel> Part 1 </ng-template> -->
+          <!-- <h5 class="h3 mb-3">Part 1</h5> -->
+          <div class="row">
+            <div class="col-xl-6">
+              <div class="form-group">
+                <label class="form-control-label"> Nama </label>
+
+                <input
+                  class="form-control"
+                  placeholder="Type here..."
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="form-group">
+                <label class="form-control-label"> Email </label>
+
+                <input
+                  class="form-control"
+                  placeholder="Type here..."
+                  type="email"
+                />
+              </div>
+            </div>
+            <div class="col-xl-12">
+              <div class="form-group">
+                <label class="form-control-label"> Lokasi </label>
+
+                <textarea class="form-control" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="form-group">
+                <label class="form-control-label"> No. Tel </label>
+
+                <input
+                  class="form-control"
+                  placeholder="Type here..."
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="form-group">
+                <label class="form-control-label"> Jenis Dokumen </label>
+
+                <select class="form-control">
+                  <option hidden selected>Sila Pilih</option>
+                  <option value="1">Jenis 1</option>
+                  <option value="2">Jenis 2</option>
+                  <option value="3">Jenis 3</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-xl-12 mb-4">
+              <!-- <div
+                style="height: 100vh"
+                leaflet
+                [leafletOptions]="options1"
+                [leafletLayers]="layers1"
+              ></div> -->
+              <div
+                class="map"
+                leaflet
+                (leafletMapReady)="onMapReady($event)"
+                [leafletOptions]="options"
+                (leafletMouseOver)="refreshMap()"
+                style="border: black solid 1px"
+              ></div>
+              <!-- <div #mapEl class="app-main"></div> -->
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-default" mat-button matStepperNext>
+              Seterusnya
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <!-- <ng-template matStepLabel> Part 2 </ng-template> -->
+          <!-- <h5 class="h3 mb-3">Part 2</h5> -->
+          <div class="row">
+            <div class="col-xl-12">
+              <ul class="list-group list-group-flush list">
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-md-3 text-center py-3">
+                      <img
+                        width="90%"
+                        alt="Image placeholder"
+                        src="assets/img/default/paypal-logo.png"
+                      />
+                    </div>
+
+                    <div class="col-md-6 py-3 pt-3">
+                      <h4>Paypal</h4>
+                      <p>
+                        A payment channel is any way that a customer can make a
+                        payment, or anywhere that YOU (the merchant) might
+                        accept a payment. Payment channels are specifically
+                        associated with how the payment is made.
+                      </p>
+                    </div>
+
+                    <div class="col-md-3">
+                      <button class="btn btn-info">Print</button>
+                      <button class="btn btn-success">Enable</button>
+                      <button class="btn btn-primary">Edit</button>
+                      <button class="btn btn-danger">Disable</button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <br />
+              <ul class="list-group list-group-flush list">
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-md-3 text-center py-3">
+                      <img
+                        width="90%"
+                        alt="Image placeholder"
+                        src="assets/img/default/mb-logo.png"
+                      />
+                    </div>
+
+                    <div class="col-md-6 py-3 pt-3">
+                      <h4>Maybank</h4>
+                      <p>
+                        A payment channel is any way that a customer can make a
+                        payment, or anywhere that YOU (the merchant) might
+                        accept a payment. Payment channels are specifically
+                        associated with how the payment is made.
+                      </p>
+                    </div>
+
+                    <div class="col-md-3">
+                      <button class="btn btn-info">Print</button>
+                      <button class="btn btn-success">Enable</button>
+                      <button class="btn btn-primary">Edit</button>
+                      <button class="btn btn-danger">Disable</button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <br />
+              <ul class="list-group list-group-flush list">
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-md-3 text-center py-3">
+                      <img
+                        width="90%"
+                        alt="Image placeholder"
+                        src="assets/img/default/cimb-logo.png"
+                      />
+                    </div>
+
+                    <div class="col-md-6 py-3 pt-3">
+                      <h4>Cimb</h4>
+                      <p>
+                        A payment channel is any way that a customer can make a
+                        payment, or anywhere that YOU (the merchant) might
+                        accept a payment. Payment channels are specifically
+                        associated with how the payment is made.
+                      </p>
+                    </div>
+
+                    <div class="col-md-3">
+                      <button class="btn btn-info">Print</button>
+                      <button class="btn btn-success">Enable</button>
+                      <button class="btn btn-primary">Edit</button>
+                      <button class="btn btn-danger">Disable</button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-danger" mat-button matStepperPrevious>
+              Kembali
+            </button>
+            <button
+              class="btn btn-default"
+              mat-button
+              (click)="successSwallStepper()"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+        <!-- <p>You are now done.</p> -->
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+
+  <div class="modal-footer">
+    <!-- <button
+          class="btn btn-default text-white"
+          type="button"
+          class="btn btn-success"
+          (click)="successSwallStepper()"
+        >
+          Save
+        </button> -->
+    <button
+      class="btn btn-outline-danger ml-auto"
+      data-dismiss="modal"
+      type="button"
+      (click)="modalRef.hide()"
+    >
+      Tutup
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #stepPermit>
+  <div class="modal-header bg-default">
+    <h6 class="modal-title text-white" id="modal-title-default">Add New</h6>
+
+    <button
+      aria-label="Close"
+      class="close"
+      data-dismiss="modal"
+      type="button"
+      (click)="modalRef1.hide()"
+    >
+      <span class="text-white" aria-hidden="true"> × </span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <a href="https://ebmgpermit.ketsa.gov.my/Registration.aspx"
+      >Tekan sini utk membaca panduan mengisi borang</a
+    >
+  </div>
+
+  <div class="modal-footer">
+    <!-- <button
+            class="btn btn-default text-white"
+            type="button"
+            class="btn btn-success"
+            (click)="successSwallStepper()"
+          >
+            Save
+          </button> -->
+    <button
+      class="btn btn-outline-danger ml-auto"
+      data-dismiss="modal"
+      type="button"
+      (click)="modalRef1.hide()"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

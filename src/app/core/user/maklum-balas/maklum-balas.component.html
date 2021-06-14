@@ -1,0 +1,255 @@
+<div class="header pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-12">
+          <h6 class="h2 text-dark d-inline-block mb-0">Maklum Balas</h6>
+
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)">
+                  <i class="fab fa-rocketchat text-dark"> </i>
+                </a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--6">
+  <div class="row">
+    <div class="img-try col-12 col-md-8">
+      <div class="card bg-default">
+        <div class="card-body">
+          <carousel>
+            <slide>
+              <img
+                src="assets/img/logo/ketsa1.jpeg"
+                alt="first slide"
+                style="display: block; width: 100%"
+              />
+            </slide>
+            <slide>
+              <img
+                src="assets/img/logo/ketsa2.jpeg"
+                alt="first slide"
+                style="display: block; width: 100%"
+              />
+            </slide>
+            <slide>
+              <img
+                src="assets/img/logo/ketsa3.jpeg"
+                alt="first slide"
+                style="display: block; width: 100%"
+              />
+            </slide>
+            <slide>
+              <img
+                src="assets/img/logo/ketsa4.jpeg"
+                alt="first slide"
+                style="display: block; width: 100%"
+              />
+            </slide>
+          </carousel>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header bg-secondary">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="m-0">Paparan Maklum Balas</h3>
+            </div>
+            <div class="col text-right">
+              <button
+                class="btn btn-icon btn-default"
+                type="button"
+                title="Papar"
+                (click)="openModal(viewAction)"
+              >
+                Tambah Baru
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="dataTables_wrapper py-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Tunjukkan
+                    <select
+                      name="datatable_length"
+                      aria-controls="datatable"
+                      class="form-control form-control-sm"
+                      (change)="entriesChange($event)"
+                    >
+                      <option value="3" [selected]="entries == 3">3</option>
+                      <option value="6" [selected]="entries == 6">6</option>
+                      <option value="9" [selected]="entries == 9">9</option>
+                      <option value="-1" [selected]="entries == -1">
+                        Semua
+                      </option>
+                    </select>
+                    rekod
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input
+                      type="search"
+                      class="form-control form-control-sm"
+                      placeholder="Search records"
+                      aria-controls="datatable"
+                      (keyup)="filterTable($event)"
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <ngx-datatable
+              class="bootstrap selection-cell"
+              [columnMode]="'force'"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="'auto'"
+              [limit]="entries != -1 ? entries : undefined"
+              [rows]="temp"
+            >
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> No. </span>
+                </ng-template>
+                <ng-template
+                  ngx-datatable-cell-template
+                  let-rowIndex="rowIndex"
+                  let-row="row"
+                >
+                  {{ rowIndex + 1 }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Makluman </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.quest }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span> Tarikh </span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.date }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column>
+                <ng-template ngx-datatable-header-template>
+                  <span>Status</span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <span
+                    *ngIf="row.status == 'checked'"
+                    class="badge badge-pill badge-success"
+                    >Disemak</span
+                  >
+                  <span
+                    *ngIf="row.status == 'inproses'"
+                    class="badge badge-pill badge-warning"
+                    >Dalam Proses</span
+                  >
+                  <span
+                    *ngIf="row.status == 'unchecked'"
+                    class="badge badge-pill badge-danger"
+                    >Belum Disemak</span
+                  >
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #viewAction>
+  <div class="modal-header bg-default">
+    <h6 class="modal-title text-white" id="modal-title-default">
+      Borang Maklum Balas
+    </h6>
+
+    <button
+      aria-label="Close"
+      class="close"
+      data-dismiss="modal"
+      type="button"
+      (click)="modalRef.hide()"
+    >
+      <span class="text-white" aria-hidden="true"> × </span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-12 mb-3">
+        <!-- <rating
+          [(ngModel)]="rate"
+          [max]="max"
+          [readonly]="isReadonly"
+          (keyup)="confirmSelection($event)"
+          style="color: warning"
+        ></rating> -->
+        <rating class="ml-2" [max]="5" [(ngModel)]="y" [customTemplate]="tt"></rating>
+        <div class="card">
+          <pre
+            class="card-block card-header"
+            style="margin: 15px 3"
+          > <b>(<i>Rate:</i> {{y}})</b> </pre>
+        </div>
+        <ng-template #tt let-i="index" let-v="value">
+          <button class="btn btn-{{ i < v ? 'warning' : 'secondary' }} ml-3">
+            {{ i < v ? " &#9733; " : " &#9734; " }}
+          </button>
+        </ng-template>
+      </div>
+
+      <div class="col-lg-12">
+        <div class="form-group">
+            <label>Sila nyatakan cadangan tuan/puan untuk penambahbaikan kami di jabatan ini.</label>
+            <textarea class="form-control" rows="4"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      class="btn btn-default text-white"
+      type="button"
+      class="btn btn-success"
+      (click)="successSwal('disimpan')"
+    >
+      Simpan
+    </button>
+    <button
+      class="btn btn-outline-danger ml-auto"
+      data-dismiss="modal"
+      type="button"
+      (click)="modalRef.hide()"
+    >
+      Tutup
+    </button>
+  </div>
+</ng-template>

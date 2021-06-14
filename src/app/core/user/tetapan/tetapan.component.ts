@@ -1,0 +1,458 @@
+import {
+  Component,
+  OnInit,
+  NgZone,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
+import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import am4themes_dataviz from "@amcharts/amcharts4/themes/dataviz";
+import { Router } from "@angular/router";
+
+import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
+import swal from "sweetalert2";
+
+import { tileLayer, latLng, marker, icon } from "leaflet";
+
+import { Calendar } from "@fullcalendar/core";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interaction from "@fullcalendar/interaction";
+
+export enum SelectionType {
+  single = "single",
+  multi = "multi",
+  multiClick = "multiClick",
+  cell = "cell",
+  checkbox = "checkbox",
+}
+
+@Component({
+  selector: "app-tetapan",
+  templateUrl: "./tetapan.component.html",
+  styleUrls: ["./tetapan.component.scss"],
+})
+export class TetapanComponent implements OnInit {
+  // Chart
+  private chart1: any;
+  private chart2: any;
+
+  //table
+  entries: number = 3;
+  selected: any[] = [];
+  temp = [];
+  activeRow: any;
+  rows: any = [
+    {
+      name: "Raziman Razak",
+      status: "checked",
+      tadbir: "Pendaftaran Terbuka",
+      ahli: "",
+      hitam: "Mengikut Pengguna",
+      nca: "Aktifkan Akaun",
+    },
+    {
+      name: "Hasnah Ali",
+      status: "inproses",
+      tadbir: "Pendaftaran Dalaman",
+      ahli: "",
+      hitam: "Mengikut Syarikat",
+      nca: "Aktifkan Akaun",
+    },
+    {
+      name: "Salim Yaakub",
+      status: "unchecked",
+      tadbir: "Pendaftaran Dalaman",
+      ahli: "",
+      hitam: "Mengikut Negara",
+      nca: "Penetapan Smeula Kata Laluan",
+    },
+    // {
+    //   project: "104",
+    //   date: "24/6/2020",
+    //   rating: "34",
+    //   quest: "",
+    //   name: "",
+    //   status: "",
+    // },
+    // {
+    //   project: "105",
+    //   date: "16/7/2020",
+    //   rating: "76",
+    //   quest: "",
+    //   name: "",
+    //   status: "",
+    // },
+    // {
+    //   project: "106",
+    //   date: "10/3/2020",
+    //   rating: "23",
+    //   quest: "",
+    //   name: "",
+    //   status: "",
+    // },
+    // {
+    //   project: "107",
+    //   date: "2/6/2020",
+    //   rating: "58",
+    //   quest: "",
+    //   name: "",
+    //   status: "",
+    // },
+    // {
+    //   project: "108",
+    //   date: "5/8/2020",
+    //   rating: "35",
+    //   quest: "",
+    //   name: "",
+    //   status: "",
+    // },
+    // {
+    //   project: "109",
+    //   date: "3/1/2020",
+    //   rating: "50",
+    //   quest: "",
+    //   name: "",
+    //   status: "",
+    // },
+  ];
+  SelectionType = SelectionType;
+
+  //calender
+  addModal: BsModalRef;
+  editModal: BsModalRef;
+  @ViewChild("modalAdd") modalAdd: ElementRef;
+  @ViewChild("modalEdit") modalEdit: ElementRef;
+  default = {
+    keyboard: true,
+    class: "modal-dialog-centered modal-secondary",
+  };
+  radios = "bg-danger";
+  eventTitle = undefined;
+  eventDescription;
+  eventId;
+  event;
+  startDate;
+  endDate;
+  calendar;
+  today = new Date();
+  y = this.today.getFullYear();
+  m = this.today.getMonth();
+  d = this.today.getDate();
+  events = [
+    {
+      id: 0,
+      title: "Lunch meeting",
+      start: "2018-11-21",
+      end: "2018-11-22",
+      className: "bg-orange",
+    },
+
+    {
+      id: 2,
+      title: "Lunch meeting",
+      start: new Date(this.y, this.m, this.d - 1, 10, 30),
+      allDay: true,
+      className: "bg-orange",
+      description:
+        "Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    },
+
+    {
+      id: 3,
+      title: "All day conference",
+      start: new Date(this.y, this.m, this.d + 7, 12, 0),
+      allDay: true,
+      className: "bg-green",
+      description:
+        "Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    },
+
+    {
+      id: 4,
+      title: "Akta 795",
+      start: new Date(this.y, this.m, this.d - 2),
+      allDay: true,
+      className: "bg-blue",
+      description:
+        "Susulan penguatkuasaan Akta 795, penyelidik yang ingin mengakses sumber biologi di Malaysia perlu memohon permit kepada Pihak Berkuasa Negeri secara atas talian melalui www.myabs.gov.my.",
+    },
+
+    {
+      id: 5,
+      title: "Winter Hackaton",
+      start: new Date(this.y, this.m, this.d + 1, 19, 0),
+      allDay: true,
+      className: "bg-red",
+      description:
+        "Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    },
+
+    {
+      id: 6,
+      title: "Digital event",
+      start: new Date(this.y, this.m, 21),
+      allDay: true,
+      className: "bg-warning",
+      description:
+        "Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    },
+
+    {
+      id: 7,
+      title: "Marketing event",
+      start: new Date(this.y, this.m, 21),
+      allDay: true,
+      className: "bg-purple",
+      description:
+        "Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    },
+
+    {
+      id: 9,
+      title: "Black Friday",
+      start: new Date(this.y, this.m, 23),
+      allDay: true,
+      className: "bg-blue",
+      description:
+        "Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    },
+
+    {
+      id: 10,
+      title: "Cyber Week",
+      start: new Date(this.y, this.m, 2),
+      allDay: true,
+      className: "bg-yellow",
+      description:
+        "Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    },
+  ];
+
+  //map
+  options = {
+    layers: [
+      tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: "...",
+      }),
+    ],
+    zoom: 8,
+    center: latLng(3.4582308051504707, 101.5892640625),
+  };
+  layers = [
+    // circle([ 46.95, -122 ], { radius: 5000 }),
+    // polygon([[ 46.8, -121.85 ], [ 46.92, -121.92 ], [ 46.87, -121.8 ]]),
+    marker([3.4582308051504707, 101.5892640625], {
+      icon: icon({
+        iconSize: [25, 41],
+        iconAnchor: [13, 41],
+        iconUrl: "../assets/img/default/pinpoint-red.png",
+      }),
+    }),
+    //3.140853, 101.693207
+    marker([3.140853, 101.693207], {
+      icon: icon({
+        iconSize: [25, 41],
+        iconAnchor: [13, 41],
+        iconUrl: "../assets/img/default/pinpoint-blue.png",
+      }),
+    }),
+    marker([2.691369, 101.750527], {
+      icon: icon({
+        iconSize: [25, 41],
+        iconAnchor: [13, 41],
+        iconUrl: "../assets/img/default/pinpoint-yellow.png",
+      }),
+    }),
+  ];
+
+  constructor(private zone: NgZone, private modalService: BsModalService) {
+    this.temp = this.rows.map((prop, key) => {
+      return {
+        ...prop,
+        id: key,
+      };
+    });
+  }
+
+  ngOnInit() {
+    this.getCharts();
+    this.initCalendar();
+  }
+
+  ngOnDestroy() {
+    this.zone.runOutsideAngular(() => {
+      if (this.chart2) {
+        console.log("Chart disposed");
+        this.chart2.dispose();
+      }
+      if (this.chart1) {
+        console.log("Chart disposed");
+        this.chart1.dispose();
+      }
+    });
+  }
+
+  getCharts() {
+    this.zone.runOutsideAngular(() => {
+      // this.getChartDashboard1();
+      // this.getChartDashboard2();
+    });
+  }
+
+  changeView(newView) {
+    this.calendar.changeView(newView);
+
+    currentDate: this.calendar.view.title;
+  }
+  initCalendar() {
+    this.calendar = new Calendar(
+      document.getElementById("calendarUserSetting"),
+      {
+        plugins: [interaction, dayGridPlugin],
+        defaultView: "dayGridMonth",
+        selectable: true,
+        editable: true,
+        events: this.events,
+        views: {
+          month: {
+            titleFormat: { month: "long", year: "numeric" },
+          },
+          agendaWeek: {
+            titleFormat: { month: "long", year: "numeric", day: "numeric" },
+          },
+          agendaDay: {
+            titleFormat: { month: "short", year: "numeric", day: "numeric" },
+          },
+        },
+        // Add new event
+        select: (info) => {
+          this.addModal = this.modalService.show(this.modalAdd, this.default);
+          this.startDate = info.startStr;
+          this.endDate = info.endStr;
+        },
+        // Edit calendar event action
+        eventClick: ({ event }) => {
+          this.eventId = event.id;
+          this.eventTitle = event.title;
+          this.eventDescription = event.extendedProps.description;
+          this.radios = "bg-danger";
+          this.event = event;
+          this.editModal = this.modalService.show(this.modalEdit, this.default);
+        },
+      }
+    );
+    this.calendar.render();
+  }
+  getNewEventTitle(e) {
+    this.eventTitle = e.target.value;
+  }
+  getNewEventDescription(e) {
+    this.eventDescription = e.target.value;
+  }
+  addNewEvent() {
+    this.events.push({
+      title: this.eventTitle,
+      start: this.startDate,
+      end: this.endDate,
+      className: this.radios,
+      id: this.events.length,
+    });
+    this.calendar.addEvent({
+      title: this.eventTitle,
+      start: this.startDate,
+      end: this.endDate,
+      className: this.radios,
+      id: this.events.length,
+    });
+    this.addModal.hide();
+    this.radios = "bg-danger";
+    (this.eventTitle = undefined),
+      (this.eventDescription = undefined),
+      (this.eventId = undefined),
+      (this.event = undefined);
+  }
+  deleteEventSweetAlert() {
+    this.editModal.hide();
+    swal
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn btn-danger",
+        cancelButtonClass: "btn btn-secondary",
+        confirmButtonText: "Yes, delete it!",
+        buttonsStyling: false,
+      })
+      .then((result) => {
+        if (result.value) {
+          this.events = this.events.filter(
+            (prop) => prop.id + "" !== this.eventId
+          );
+          this.initCalendar();
+          swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            type: "success",
+            confirmButtonClass: "btn btn-primary",
+            buttonsStyling: false,
+          });
+        }
+      });
+    this.radios = "bg-danger";
+    (this.eventTitle = undefined),
+      (this.eventDescription = undefined),
+      (this.eventId = undefined),
+      (this.event = undefined);
+  }
+  updateEvent() {
+    this.events = this.events.map((prop, key) => {
+      if (prop.id + "" === this.eventId + "") {
+        return {
+          ...prop,
+          title: this.eventTitle,
+          className: this.radios,
+          description: this.eventDescription,
+        };
+      } else {
+        return prop;
+      }
+    });
+    this.radios = "bg-danger";
+    (this.eventTitle = undefined),
+      (this.eventDescription = undefined),
+      (this.eventId = undefined),
+      (this.event = undefined);
+    this.initCalendar();
+    this.editModal.hide();
+  }
+
+  entriesChange($event) {
+    this.entries = $event.target.date;
+  }
+  filterTable($event) {
+    let val = $event.target.date;
+    this.temp = this.rows.filter(function (d) {
+      for (var key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  successSwal(task) {
+    swal.fire({
+      title: "Success",
+      text: "Successfully " + task + "!",
+      type: "success",
+      buttonsStyling: false,
+      confirmButtonClass: "btn btn-success",
+    });
+  }
+}
